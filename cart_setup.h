@@ -32,12 +32,10 @@ void setup_cart() {
     gpio_init(27);
     gpio_set_dir(27, GPIO_IN);
     gpio_pull_up(27);
-
+    
+    sleep_us(1);  // Give enough time for the pins to settle
+    
     cart = 8*gpio_get(27) + 4*gpio_get(26) + 2*gpio_get(22) + gpio_get(21);
-    // GPIO(27)*8 only works if called twice?? What is wrong?
-    cart = 8*gpio_get(27) + 4*gpio_get(26) + 2*gpio_get(22) + gpio_get(21);
-    // uint8_t gp27 = gpio_get(27);
-    // cart = gp27*8 + 4*gpio_get(26) + 2*gpio_get(22) + gpio_get(21);
 
     // Specify contents of emulated ROM.
     if (cart == 0){
