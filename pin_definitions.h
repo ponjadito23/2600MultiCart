@@ -73,13 +73,13 @@ void setup_gpio() {
     gpio_set_dir(D7, GPIO_OUT);
 }
 
-int get_requested_address() {
+int __not_in_flash_func(get_requested_address)() {
     // Return only first 12 bits from address bus.
-    return ((gpio_get_all() >> 8) & 4095);
+    return ((gpio_get_all() >> 8) & 0xfff);
 }
 
-void put_data_on_bus(uint8_t rom_cont) {
+void __not_in_flash_func(put_data_on_bus)(uint8_t rom_cont) {
     // 8-bits onto the data bus
-    gpio_put_masked(255, rom_cont);
+    gpio_put_masked(0xff, rom_cont);
 }
 

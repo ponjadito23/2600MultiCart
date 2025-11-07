@@ -8,6 +8,8 @@ include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 project(PICO_ROM CXX C ASM)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_C_FLAGS_RELEASE_INIT "-Os")
+set(CMAKE_CXX_FLAGS_RELEASE_INIT "-Os")
 
 # Initialize the SDK
 pico_sdk_init()
@@ -60,7 +62,13 @@ target_link_libraries(pico_rom PRIVATE
         pico_stdlib
         hardware_pio
         hardware_adc
+        pico_multicore
         )
+
+target_compile_definitions(pico_rom PRIVATE
+        
+        )
+# pico_set_binary_type(pico_rom copy_to_ram)
 
 pico_add_extra_outputs(pico_rom)
 

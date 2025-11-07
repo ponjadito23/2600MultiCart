@@ -154,28 +154,34 @@ void setup_cart() {
 
 // Bank Switching Functions 
 
-void BankSwitching_none(uint16_t addr_in) {
+// <=4k rom
+void __not_in_flash_func(BankSwitching_none)(uint16_t addr_in) {
     romoffset = 0;
 }
 
-void BankSwitching_F8(uint16_t addr_in) {
-    if (addr_in == 4088){
-        romoffset = 0;
-    } else if (addr_in == 4089){
-        romoffset = 4096;
+// 8k rom
+void __not_in_flash_func(BankSwitching_F8)(uint16_t addr_in) {
+    // if (addr_in == 0xff8){
+    //     romoffset = 0x0;
+    // } else if (addr_in == 0xff9){
+    //     romoffset = 0x1000;
+    // }
+
+    if ((addr_in & 0xfffe) == 0xff8)
+        romoffset = 0x1000 * (addr_in & 0x1);
+}
+
+// 16k rom
+void __not_in_flash_func(BankSwitching_F6)(uint16_t addr_in) {
+    if ((addr_in >= 0xff6) && (addr_in <= 0xff9)){
+        romoffset = 0x1000 * (addr_in - 0xff6);
     }
 }
 
-void BankSwitching_F6(uint16_t addr_in) {
-    if ((addr_in >= 4086) && (addr_in <= 4089)){
-        romoffset = 4096 * (addr_in - 4086);
-    }
-}
+// 32k rom
+void __not_in_flash_func(BankSwitching_F4)(uint16_t addr_in) {
 
-
-void BankSwitching_F4(uint16_t addr_in) {
-
-    if ((addr_in >= 4084) && (addr_in <= 4091)){
-        romoffset = 4096 * (addr_in - 4084);
+    if ((addr_in >= 0xff4) && (addr_in <= 0xffb)){
+        romoffset = 0x1000 * (addr_in - 0xff4);
     }
 }
