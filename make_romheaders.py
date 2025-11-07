@@ -9,6 +9,11 @@ romlist = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 romdir = "roms"
 files = os.listdir(romdir)
 
+try:
+    files.remove("README.mb")
+except:
+    pass
+
 nfiles = len(files)
 for i in range(nfiles):
     print(i,files[i])
@@ -40,18 +45,18 @@ for i in range(nroms):
     
     fout.write('//'+"{:04d}".format(i)+" "+files[romlist[i]]+"\n")
     fout.write(' '+"\n")
-    fout.write('uint romsize_in = '+str(romsize)+';'+"\n")
+    fout.write('const uint romsize_in = '+str(romsize)+';'+"\n")
     for i in range(0,romsize,16):
         romstring = " "
         for j in range(16):
-            romstring = romstring + str(rom[i+j]) + ", "
+            romstring = romstring + str(int(rom[i+j])) + ", "
         if i == 0:
-            fout.write('uint8_t rom_contents_in['+str(romsize)+'] = {'+romstring+"\n")
+            fout.write('const uint8_t rom_contents_in['+str(romsize)+'] = {'+romstring+"\n")
         elif i+j+1 == romsize:
             romstring = " "
             for j in range(15):
-                romstring = romstring + str(rom[i+j]) + ", "
-            romstring = romstring + str(rom[i+15]) + "};"
+                romstring = romstring + str(int(rom[i+j])) + ", "
+            romstring = romstring + str(int(rom[i+15])) + "};"
             fout.write(romstring+"\n")
         else:
             fout.write(romstring+"\n")
